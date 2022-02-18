@@ -1,0 +1,7 @@
+1 rutvi female 25
+2 deep male 26
+3 krishma female 30
+4 bansi male 22
+5 devisha female 27
+6 manisha female 40
+7 dhruvil male 20
