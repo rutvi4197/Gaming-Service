@@ -2,16 +2,15 @@ package com.intuit.controller;
 
 import com.intuit.model.Player;
 import com.intuit.service.PlayerService;
+import com.intuit.service.action.PlayerFileReaderImpl;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,23 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerController {
 
   private final PlayerService playerService;
-  public PlayerController(PlayerService playerService) {
+  private final PlayerFileReaderImpl playerFileReader;
+  public PlayerController(PlayerService playerService, PlayerFileReaderImpl playerFileReader) {
     this.playerService = playerService;
+    this.playerFileReader = playerFileReader;
   }
 
-  @GetMapping(value = "/readPlayerFromFile")
-  public boolean readPlayersFromFile() throws FileNotFoundException {
-   return this.playerService.readPlayersFromFile();
-  }
-  @GetMapping(value = "/addPlayer")
-  public boolean addPlayer(@RequestParam("name")String name,
-                        @RequestParam("gender")String  gender,
-                        @RequestParam("age")int age) throws FileNotFoundException {
-   return this.playerService.addPlayer(name,gender,age);
+  @GetMapping(value = "/read")
+  public boolean readPlayersFromFile(){
+   return this.playerFileReader.invoke();
   }
 
-  @GetMapping(value = "/getAllPlayer")
-  public Collection<Player> addPlayer() throws FileNotFoundException {
+  @PostMapping(value = "/add")
+  public boolean getAllPlayer(@RequestBody Player player) {
+   return this.playerService.addPlayer(player);
+  }
+
+  @GetMapping()
+  public Collection<Player> getAllPlayer()  {
     return this.playerService.getAllPlayer();
   }
 

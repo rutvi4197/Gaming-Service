@@ -3,10 +3,12 @@ package com.intuit.controller;
 import com.intuit.model.Score;
 import com.intuit.service.PublishScoreService;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,13 +21,14 @@ public class PublishScoreController {
     this.publishScoreService = publishScoreService;
   }
 
-  @GetMapping(value = "/readScoresFromFile")
-  public boolean readScoresFromFile() throws FileNotFoundException {
-    return this.publishScoreService.readScoreFromTopic();
+  @GetMapping(value = "/scores")
+  public boolean readScores() {
+    return this.publishScoreService.readScores();
   }
 
-  @GetMapping(value = "/getAllPlayer")
-  public List<Score> addPlayer() throws FileNotFoundException {
-    return this.publishScoreService.getAllScoreFromScoreTable();
+  @PostMapping(value = "/scores",consumes = MediaType.APPLICATION_JSON_VALUE)
+  public boolean addScores(@RequestBody List<Score> score) {
+    return this.publishScoreService.writeScores(score);
   }
+
 }
